@@ -1,7 +1,10 @@
-import Header from "@/components/ag/Header";
-import Footer from "@/components/ag/Footer";
-import BackTop from "@/components/ag/BackTop";
+import Header from "@/components/aig/Header";
+import Footer from "@/components/aig/Footer";
+import AigMotion from "@/components/aig/AigMotion";
+import BackTop from "@/components/aig/BackTop";
 import { site } from "@/lib/site";
+import "@/components/aig/aig.css";
+import "@/components/aig/aig-pages.css";
 
 const orgSchema = {
   "@context": "https://schema.org",
@@ -14,12 +17,13 @@ const orgSchema = {
 
 export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="overflow-x-clip bg-white font-ag text-ag-text">
+    <div id="top" className="aig">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
       <Header />
       <main>{children}</main>
       <Footer />
       <BackTop />
+      <AigMotion />
     </div>
   );
 }

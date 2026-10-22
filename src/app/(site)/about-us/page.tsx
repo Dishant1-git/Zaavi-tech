@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import PageHero from "@/components/ag/PageHero";
-import Timeline from "@/components/ag/Timeline";
-import CtaBand from "@/components/ag/CtaBand";
-import Motion from "@/components/ag/Motion";
+import PageHero from "@/components/aig/PageHero";
+import Process from "@/components/aig/Process";
+import Cta from "@/components/aig/Cta";
 import Icon from "@/components/ag/icons";
-import { ArtTile, Tube } from "@/components/ag/art";
-import { Arrow, container, Eyebrow, Heading, notch } from "@/components/ag/ui";
+import { Glyph, SectionHeading } from "@/components/aig/ui";
 import { aboutPage as p } from "@/lib/content";
+import { photos } from "@/lib/images";
+import Photo from "@/components/aig/Photo";
 
 export const metadata: Metadata = {
   title: { absolute: p.seoTitle },
@@ -18,104 +18,146 @@ export const metadata: Metadata = {
 export default function AboutUs() {
   return (
     <>
-      <PageHero crumbs={[{ label: "Home", href: "/" }, { label: "About Us" }]} title={p.h1} sub={p.sub} cta={{ label: p.closing.cta, href: "/contact" }} />
+      <PageHero
+        crumbs={[{ label: "Home", href: "/" }, { label: "About Us" }]}
+        title={p.h1}
+        sub={p.sub}
+        cta={{ label: p.closing.cta, href: "/contact" }}
+        icons={["compass", "brain", "rocket"]}
+      />
 
       {/* Who we are / Why we exist */}
-      <section className="relative overflow-hidden pt-24 pb-24 lg:pt-32">
-        <div className={`${container} grid items-center gap-16 lg:grid-cols-[1fr_1fr]`}>
-          <div className="relative" data-reveal="right">
-            <div className="aspect-[5/4] overflow-hidden rounded-[24px]" style={notch(80)}>
-              <div data-parallax-inner className="h-[120%] w-full"><ArtTile variant={5} seed={21} /></div>
-            </div>
-            <Tube shape="spiral" data-parallax="-80" className="pointer-events-none absolute -bottom-16 -left-10 w-[220px]" width={40} />
-          </div>
-          <div>
-            <Eyebrow>Who we are</Eyebrow>
-            <p data-reveal="up" className="font-ag text-[22px] leading-[1.55] font-bold text-ag-dark sm:text-[26px]">{p.who}</p>
-            <div className="mt-12">
-              <Eyebrow>Why we exist</Eyebrow>
-              {p.why.map((w) => <p key={w} data-reveal="up" className="mt-4 text-[16px] leading-[1.9] font-medium text-ag-text">{w}</p>)}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Mission & vision */}
-      <section className="relative">
-        <div className={`${container} grid gap-6 md:grid-cols-2`}>
-          {[{ k: "Our mission", v: p.mission, icon: "target" as const }, { k: "Our vision", v: p.vision, icon: "rocket" as const }].map((m) => (
-            <div key={m.k} data-reveal="up" className="relative overflow-hidden rounded-[30px] bg-[linear-gradient(135deg,#0b1f5c,#0a3fb8)] p-10 text-white">
-              <div className="pointer-events-none absolute -top-20 -right-20 h-64 w-64 rounded-full bg-[#1f8bff]/40 blur-[80px]" />
-              <span className="relative grid h-14 w-14 place-items-center rounded-2xl bg-white/10 text-[#7cc4ff]"><Icon name={m.icon} className="h-7 w-7" /></span>
-              <h2 className="relative mt-6 font-ag text-[28px] font-extrabold">{m.k}</h2>
-              <p className="relative mt-4 text-[17px] leading-[1.8] text-white/80">{m.v}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Principles */}
-      <section className="relative mt-24 bg-[linear-gradient(120deg,#e9f0fb,#e3eefc_45%,#eef4fb)] py-24">
-        <div className={container}>
-          <div className="mx-auto max-w-[600px] text-center">
-            <Eyebrow center>How we think</Eyebrow>
-            <Heading center>Our Principles</Heading>
-          </div>
-          <div className="mx-auto mt-14 max-w-[1000px] overflow-hidden rounded-[26px] bg-white shadow-[0_30px_60px_-40px_rgba(13,26,66,0.5)]">
-            {p.principles.map((pr, i) => (
-              <div key={pr.title} data-reveal="up" className="group grid gap-3 border-b border-ag-border px-8 py-7 transition-colors last:border-0 hover:bg-ag-light sm:grid-cols-[60px_260px_1fr] sm:items-center">
-                <span className="font-ag text-2xl font-extrabold text-[#bcd3f5] transition-colors group-hover:text-ag-base">0{i + 1}</span>
-                <h3 className="font-ag text-lg font-bold text-ag-dark">{pr.title}</h3>
-                <p className="text-[15px] leading-[1.7] font-medium text-ag-text">{pr.copy}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* What we do */}
-      <section className="relative pt-24">
-        <div className={container}>
-          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-            <div>
-              <Eyebrow>Our services</Eyebrow>
-              <Heading>What We Do</Heading>
-            </div>
-            <Link href="/ai-solutions" className="group inline-flex items-center gap-2 font-ag text-sm font-bold text-ag-base uppercase">
-              All AI solutions <Arrow className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </div>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {p.whatWeDo.map((w) => (
-              <Link key={w.text} href={w.href} data-reveal="up" className="group flex items-center gap-4 rounded-[20px] border border-ag-border p-5 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_25px_50px_-25px_rgba(10,63,184,0.45)]">
-                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-ag-light text-ag-base transition-all group-hover:bg-[linear-gradient(135deg,#1f8bff,#0a3fb8)] group-hover:text-white">
-                  <Icon name={w.icon} className="h-6 w-6" />
+      <section className="flat-spacing">
+        <div className="aig-container">
+          <div className="grid items-center gap-16 lg:grid-cols-2 lg:gap-20">
+            <div className="who-media effectFade fadeUp">
+              <Photo photo={photos.workshop} className="main" sizes="(min-width: 1024px) 600px, 100vw" />
+              <Photo photo={photos.partnership} className="inset" sizes="(min-width: 1024px) 320px, 55vw" />
+              <div className="badge neo">
+                <span className="brand-tile"><Icon name="target" /></span>
+                <span>
+                  <span className="lbl block">Our focus</span>
+                  <span className="fw-semibold">Business problem first</span>
                 </span>
-                <span className="flex-1 font-ag text-[15px] leading-[1.5] font-bold text-ag-dark">{w.text}</span>
-              </Link>
-            ))}
+              </div>
+            </div>
+
+            <div>
+              <SectionHeading sub="Who we are" className="mb-8">
+                Practical AI, <br /> Built to Fit
+              </SectionHeading>
+              <p className="body-1 fw-semibold mb-10 effectFade fadeUp">{p.who}</p>
+              <div className="lbl mb-4 effectFade fadeUp">Why we exist</div>
+              <div className="grid gap-4">
+                {p.why.map((w, i) => (
+                  <div key={w} className={`why-item ${i ? "dark" : ""} effectFade fadeUp`} data-delay={i * 0.1}>
+                    <span className="num-chip">{String(i + 1).padStart(2, "0")}</span>
+                    <div>
+                      <div className="fw-semibold mb-1">{i ? "Our answer" : "The problem"}</div>
+                      <p className={i ? "t-n400" : "t-sec"}>{w}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-10 flex flex-wrap gap-3 effectFade fadeRotateX">
+                <Link href="/contact" className="tf-btn">{p.closing.cta}</Link>
+                <Link href="/ai-solutions" className="tf-btn-2">Our services <Glyph name="arrowUpRight" /></Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <Timeline eyebrow="Our process" title="How We Engage" items={p.engage.map((e) => ({ title: e.title, rows: [{ text: e.body }] }))} />
+      <div className="box-white">
+        {/* Mission & vision */}
+        <section className="flat-spacing">
+          <div className="aig-container">
+            <SectionHeading sub="Mission & vision" center className="mb-8 md:mb-16">
+              Why We Do <br /> What We Do
+            </SectionHeading>
+            <div className="grid gap-6 md:grid-cols-2">
+              {[
+                { k: "Our mission", v: p.mission, icon: "target" as const, dark: false, photo: photos.whiteboard },
+                { k: "Our vision", v: p.vision, icon: "rocket" as const, dark: true, photo: photos.earthNetwork },
+              ].map((m, i) => (
+                <div key={m.k} className={`${m.dark ? "card-dark" : "card"} effectFade fadeUp`} data-delay={i * 0.1}>
+                  <Photo photo={m.photo} className="-mx-4 -mt-4 mb-[-36px] h-56 rounded-[28px]!" sizes="(min-width: 768px) 50vw, 100vw" />
+                  <span className="brand-tile relative z-[1] mb-8 ml-4"><Icon name={m.icon} /></span>
+                  <h3 className="h4 fw-semibold mb-4">{m.k}</h3>
+                  <p className={m.dark ? "t-n400" : "t-sec"}>{m.v}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Principles */}
+        <section className="flat-spacing pt-0">
+          <div className="aig-container">
+            <SectionHeading sub="How we think" center className="mb-8 md:mb-16">
+              Our Principles
+            </SectionHeading>
+            <div className="grid-cards three">
+              {p.principles.map((pr, i) => (
+                <div key={pr.title} className="features-item effectFade fadeUp" data-delay={(i % 3) * 0.1}>
+                  <span className="dark-tile text-lg fw-semibold">{String(i + 1).padStart(2, "0")}</span>
+                  <h3 className="title h6 fw-semibold">{pr.title}</h3>
+                  <p className="t-sec">{pr.copy}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* What we do */}
+        <section className="flat-spacing pt-0">
+          <div className="aig-container">
+            <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+              <SectionHeading sub="Our services" className="mb-0">What We Do</SectionHeading>
+              <Link href="/ai-solutions" className="tf-btn-2 self-start md:self-auto effectFade fadeUp">
+                All AI solutions <Glyph name="arrowUpRight" />
+              </Link>
+            </div>
+            <div className="grid-cards three mt-10 md:mt-16">
+              {p.whatWeDo.map((w, i) => (
+                <Link key={w.text} href={w.href} className="features-item effectFade fadeUp" data-delay={(i % 3) * 0.1}>
+                  <span className="dark-tile"><Icon name={w.icon} /></span>
+                  <h3 className="title h6 fw-semibold">{w.text}</h3>
+                  <span className="more">Learn more <Glyph name="arrowUpRight" className="h-4 w-4" /></span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <Process
+          sub="Our process"
+          title={<>How We <br /> Engage</>}
+          intro="A simple, transparent way of working, from the first conversation to continuous improvement."
+          steps={p.engage}
+          icons={["chat", "doc", "rocket", "refresh"]}
+          cta={{ label: p.closing.cta, href: "/contact" }}
+        />
+      </div>
 
       {/* Commitment */}
-      <section className="relative pb-24">
-        <div className="mx-auto max-w-[1320px] px-3 sm:px-5">
-          <div className="relative overflow-hidden rounded-[60px] bg-[linear-gradient(120deg,#0b1a8a,#0b1f5c_45%,#0b2a6b_75%,#0a1840)] px-6 py-20 sm:px-16 lg:py-24">
-            <div className="grain-local opacity-[0.12]" />
-            <div className="relative mx-auto max-w-[900px] text-center">
-              <Eyebrow light center>Our commitment</Eyebrow>
-              <p data-split className="font-ag text-[26px] leading-[1.35] font-extrabold text-white sm:text-[36px]">{p.commitment[0]}</p>
-              <p data-reveal="up" className="mx-auto mt-8 max-w-[720px] text-[17px] leading-[1.85] text-[#b5c3e8]">{p.commitment[1]}</p>
+      <div className="h-6" />
+      <div className="box-black">
+        <div className="light-box" />
+        <span className="light-line top" />
+        <span className="light-line bot" />
+        <section className="flat-spacing relative">
+          <div className="aig-container">
+            <div className="mx-auto max-w-[900px] text-center">
+              <SectionHeading sub="Our commitment" center dark className="mb-8 md:mb-12" />
+              <p className="h4 fw-semibold text-white effectFade fadeRotateX">{p.commitment[0]}</p>
+              <p className="body-1 t-n400 mx-auto mt-8 max-w-[720px] effectFade fadeUp">{p.commitment[1]}</p>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
-      <CtaBand title={p.closing.h2} body={p.closing.body} cta={p.closing.cta} />
-      <Motion />
+      <Cta title={p.closing.h2} body={p.closing.body} cta={p.closing.cta} />
     </>
   );
 }

@@ -485,8 +485,14 @@ export const nav: NavItem[] = (() => {
     { label: "AI Solutions", href: "/ai-solutions", children: ai.map((l) => ({ label: l.nav, href: `/${l.slug}`, icon: l.icon })) },
   ];
   if (ent.length) items.push({ label: "Enterprise Technology", href: `/${ent[0].slug}`, children: ent.map((l) => ({ label: l.nav, href: `/${l.slug}`, icon: l.icon })) });
-  // Industries and Insights are held back until each has a few pages of real content (Part 9).
-  items.push({ label: "FAQ", href: "/faq" }, { label: "Contact Us", href: "/contact" });
+  // Industries are held back until they have a few pages of real content (Part 9).
+  items.push(
+    { label: "Others", href: "/blog", children: [
+      { label: "Blog", href: "/blog", icon: "doc" },
+      { label: "FAQ", href: "/faq", icon: "chat" },
+    ] },
+    { label: "Contact Us", href: "/contact" },
+  );
   return items;
 })();
 

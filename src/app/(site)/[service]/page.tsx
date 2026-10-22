@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import PageHero from "@/components/ag/PageHero";
-import Flow from "@/components/ag/Flow";
-import CtaBand from "@/components/ag/CtaBand";
-import UseCaseStack from "@/components/ag/UseCaseStack";
-import Motion from "@/components/ag/Motion";
+import PageHero from "@/components/aig/PageHero";
+import Flow from "@/components/aig/Flow";
+import Cta from "@/components/aig/Cta";
 import Icon from "@/components/ag/icons";
-import { Arrow, container, Eyebrow, Heading } from "@/components/ag/ui";
+import { Glyph, SectionHeading } from "@/components/aig/ui";
+import Photo from "@/components/aig/Photo";
 import { activeLandings, landingBySlug } from "@/lib/content";
+import { serviceCover, servicePhotos } from "@/lib/images";
 
 export const dynamicParams = false;
 
@@ -28,71 +28,90 @@ export default async function ServicePage({ params }: { params: Promise<{ servic
   const groupLabel = l.group === "ai" ? "AI Solutions" : "Enterprise Technology";
   const related = activeLandings.filter((o) => o.slug !== l.slug).slice(0, 3);
   const contactHref = `/contact?service=${l.slug}`;
+  const useCasePhotos = servicePhotos[l.slug];
 
   return (
     <>
       <PageHero
         crumbs={[{ label: "Home", href: "/" }, { label: groupLabel, href: l.group === "ai" ? "/ai-solutions" : undefined }, { label: l.nav }]}
-        eyebrow={groupLabel}
         title={l.h1}
         body={[l.intro]}
         cta={{ label: l.cta, href: contactHref }}
+        secondary={{ label: "All AI solutions", href: "/ai-solutions" }}
         visual={<Flow steps={l.flow} icon={l.icon} />}
       />
 
-      {/* What we deliver */}
-      <section className="relative pt-24 pb-24 lg:pt-32">
-        <div className={`${container} grid gap-14 lg:grid-cols-[0.8fr_1.2fr]`}>
-          <div className="lg:sticky lg:top-32 lg:self-start">
-            <Eyebrow>{l.nav}</Eyebrow>
-            <Heading>What We Deliver</Heading>
-            <div data-reveal="up" className="mt-8 grid h-20 w-20 place-items-center rounded-3xl bg-[linear-gradient(135deg,#1f8bff,#0a3fb8)] text-white shadow-[0_20px_40px_-15px_rgba(31,139,255,0.7)]">
-              <Icon name={l.icon} className="h-10 w-10" />
+      <div className="box-white mt-6">
+        {/* What we deliver */}
+        <section className="flat-spacing">
+          <div className="aig-container">
+            <div className="grid gap-10 lg:grid-cols-[5fr_7fr] lg:gap-6">
+              <div className="lg:sticky lg:top-32 lg:self-start">
+                <SectionHeading sub={l.nav} className="mb-10">What We <br /> Deliver</SectionHeading>
+                <span className="brand-tile h-20! w-20! effectFade fadeUp"><Icon name={l.icon} /></span>
+              </div>
+              <ul className="grid gap-4 sm:grid-cols-2">
+                {l.deliver.map((d, i) => (
+                  <li key={d} className="features-item flex flex-col gap-6 effectFade fadeUp" data-delay={(i % 2) * 0.1}>
+                    <span className="num-chip">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="h6 fw-semibold">{d}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
-          <ul className="grid gap-4 sm:grid-cols-2">
-            {l.deliver.map((d, i) => (
-              <li key={d} data-reveal="up" className="group flex gap-4 rounded-[22px] border border-ag-border bg-white p-6 transition-all duration-500 hover:-translate-y-1 hover:shadow-[0_25px_50px_-25px_rgba(10,63,184,0.45)]">
-                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-ag-light font-ag text-sm font-extrabold text-ag-base transition-all duration-500 group-hover:bg-[linear-gradient(135deg,#1f8bff,#0a3fb8)] group-hover:text-white">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <span className="pt-2 font-ag text-[16px] leading-[1.55] font-semibold text-ag-dark">{d}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+        </section>
 
-      <UseCaseStack items={l.helps} seed={activeLandings.indexOf(l) * 3 + 1} cta={l.cta} href={contactHref} />
-
-      {/* Related services (internal links, Part 7) */}
-      <section className="relative pt-24 pb-16">
-        <div className={container}>
-          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-            <div>
-              <Eyebrow>Explore more</Eyebrow>
-              <Heading>Related Solutions</Heading>
+        {/* Where it helps */}
+        <section className="flat-spacing pt-0">
+          <div className="aig-container">
+            <div className="mb-8 flex flex-col justify-between gap-4 md:mb-16 md:flex-row md:items-end">
+              <SectionHeading sub="Use cases" className="mb-0">Where It Helps</SectionHeading>
+              <div className="lbl effectFade fadeUp">{String(l.helps.length).padStart(2, "0")} use cases</div>
             </div>
-            <Link href="/ai-solutions" className="group inline-flex items-center gap-2 font-ag text-sm font-bold text-ag-base uppercase">
-              All AI solutions <Arrow className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
+            <div className="grid gap-8">
+              {l.helps.map((h, i) => (
+                <article key={h} className="use-card md:sticky effectFade fadeUp" style={{ top: 120 + i * 24 }}>
+                  <Photo photo={useCasePhotos[i % 3]} className="image" sizes="(min-width: 768px) 55vw, 100vw" />
+                  <div className="content">
+                    <div className="pagi-dot">
+                      {l.helps.map((_, k) => <span key={k} className={k === i ? "active" : ""} />)}
+                    </div>
+                    <div className="lbl mb-2">Use case {String(i + 1).padStart(2, "0")}</div>
+                    <h3 className="h4 fw-semibold mb-8">{h}</h3>
+                    <Link href={contactHref} className="tf-btn self-start">{l.cta}</Link>
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {related.map((r) => (
-              <Link key={r.slug} href={`/${r.slug}`} data-reveal="up" className="group flex items-center gap-4 rounded-[22px] border border-ag-border bg-ag-light p-6 transition-all duration-500 hover:-translate-y-1 hover:bg-white hover:shadow-[0_25px_50px_-25px_rgba(10,63,184,0.45)]">
-                <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-white text-ag-base transition-all group-hover:bg-[linear-gradient(135deg,#1f8bff,#0a3fb8)] group-hover:text-white">
-                  <Icon name={r.icon} className="h-6 w-6" />
-                </span>
-                <span className="flex-1 font-ag text-[16px] font-bold text-ag-dark">{r.nav}</span>
-                <Arrow className="h-5 w-5 text-ag-base transition-transform group-hover:translate-x-1" />
+        </section>
+
+        {/* Related services (internal links, Part 7) */}
+        <section className="flat-spacing pt-0">
+          <div className="aig-container">
+            <div className="mb-8 flex flex-col justify-between gap-4 md:mb-16 md:flex-row md:items-end">
+              <SectionHeading sub="Explore more" className="mb-0">Related Solutions</SectionHeading>
+              <Link href="/ai-solutions" className="tf-btn-2 self-start md:self-auto effectFade fadeUp">
+                All AI solutions <Glyph name="arrowUpRight" />
               </Link>
-            ))}
+            </div>
+            <div className="grid-cards three">
+              {related.map((r, i) => (
+                <Link key={r.slug} href={`/${r.slug}`} className="features-item hover-zoom effectFade fadeUp" data-delay={i * 0.1}>
+                  <Photo photo={serviceCover(r.slug)} sizes="(min-width: 1024px) 400px, 100vw" />
+                  <span className="dark-tile"><Icon name={r.icon} /></span>
+                  <h3 className="title h6 fw-semibold">{r.nav}</h3>
+                  <p className="t-sec">{r.intro}</p>
+                  <span className="more">Learn more <Glyph name="arrowUpRight" className="h-4 w-4" /></span>
+                </Link>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
-      <CtaBand title={l.closing} cta={l.cta} href={contactHref} />
-      <Motion />
+      <Cta title={l.closing} cta={l.cta} href={contactHref} />
     </>
   );
 }

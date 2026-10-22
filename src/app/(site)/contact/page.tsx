@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
-import PageHero from "@/components/ag/PageHero";
-import ContactForm from "@/components/ag/ContactForm";
-import Motion from "@/components/ag/Motion";
-import { container } from "@/components/ag/ui";
-import { contactPage as p } from "@/lib/content";
+import PageHero from "@/components/aig/PageHero";
+import ContactForm from "@/components/aig/ContactForm";
+import Icon from "@/components/ag/icons";
+import { SectionHeading } from "@/components/aig/ui";
+import { contactPage as p, type IconName } from "@/lib/content";
 import { site } from "@/lib/site";
+import { photos } from "@/lib/images";
+import Photo from "@/components/aig/Photo";
 
 export const metadata: Metadata = {
   title: { absolute: p.seoTitle },
@@ -13,47 +15,58 @@ export const metadata: Metadata = {
 };
 
 export default function Contact() {
-  const details = [
-    { k: "Email", v: site.email, href: `mailto:${site.email}` },
-    { k: "Phone / WhatsApp", v: site.phone, href: `tel:${site.phone}` },
-    { k: "Office", v: site.address },
-    { k: "Business hours", v: site.hours },
+  const details: { k: string; v: string; href?: string; icon: IconName }[] = [
+    { k: "Email", v: site.email, href: `mailto:${site.email}`, icon: "chat" },
+    { k: "Phone / WhatsApp", v: site.phone, href: `tel:${site.phone}`, icon: "signal" },
+    { k: "Office", v: site.address, icon: "building" },
+    { k: "Business hours", v: site.hours, icon: "gauge" },
   ];
   return (
     <>
-      <PageHero crumbs={[{ label: "Home", href: "/" }, { label: "Contact" }]} title={p.h1} sub={p.sub} body={[p.body]} />
-      <section className="relative pt-20 pb-28">
-        <div className={`${container} grid items-start gap-10 lg:grid-cols-[1.5fr_1fr]`}>
-          <div data-reveal="up"><ContactForm /></div>
-          <aside className="space-y-6 lg:sticky lg:top-28">
-            <div data-reveal="left" className="rounded-[30px] bg-[linear-gradient(135deg,#0b1f5c,#0a3fb8)] p-8 text-white">
-              <h2 className="font-ag text-xl font-extrabold">What happens next</h2>
-              <ol className="mt-6 space-y-5">
-                {p.next.map((n, i) => (
-                  <li key={n.bold} className="flex gap-4">
-                    <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/15 font-ag text-sm font-extrabold">{i + 1}</span>
-                    <p className="text-[15px] leading-[1.7] text-white/80"><strong className="text-white">{n.bold}</strong> {n.rest}</p>
-                  </li>
-                ))}
-              </ol>
+      <PageHero
+        crumbs={[{ label: "Home", href: "/" }, { label: "Contact" }]}
+        title={p.h1}
+        sub={p.sub}
+        body={[p.body]}
+        icons={["chat", "spark", "rocket"]}
+      />
+      <section className="flat-spacing">
+        <div className="aig-container">
+          <div className="grid items-start gap-6 lg:grid-cols-2">
+            <div className="flex h-full flex-col justify-between gap-12 lg:py-10">
+              <div>
+                <SectionHeading sub="Contact" className="mb-10 md:mb-12">
+                  Let&apos;s Build <br /> Intelligent Things
+                </SectionHeading>
+                <div className="grid gap-5">
+                  {details.map((d, i) => (
+                    <div key={d.k} className="contact-item effectFade fadeRotateX" data-delay={i * 0.1}>
+                      <span className="ic"><Icon name={d.icon} /></span>
+                      <div>
+                        <div className="fw-semibold mb-0.5">{d.k}</div>
+                        {d.href ? <a href={d.href} className="t-sec link1">{d.v}</a> : <div className="t-sec">{d.v}</div>}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <Photo photo={photos.laptopPointing} className="h-60 rounded-[32px]! shadow-[var(--sh-card)] effectFade fadeUp" sizes="(min-width: 1024px) 50vw, 100vw" />
+              <div className="card-dark effectFade fadeUp">
+                <h2 className="h5 fw-semibold mb-6">What happens next</h2>
+                <ol className="grid gap-5">
+                  {p.next.map((n, i) => (
+                    <li key={n.bold} className="flex gap-4">
+                      <span className="num-chip h-9! w-9! text-sm">{i + 1}</span>
+                      <p className="t-n400"><strong className="text-white fw-semibold">{n.bold}</strong> {n.rest}</p>
+                    </li>
+                  ))}
+                </ol>
+              </div>
             </div>
-            <div data-reveal="left" className="rounded-[30px] border border-ag-border bg-ag-light p-8">
-              <h2 className="font-ag text-xl font-extrabold text-ag-dark">Contact details</h2>
-              <dl className="mt-5 space-y-4">
-                {details.map((d) => (
-                  <div key={d.k}>
-                    <dt className="font-ag text-[11px] font-bold tracking-[0.15em] text-ag-base uppercase">{d.k}</dt>
-                    <dd className="mt-1 font-ag text-[15px] font-semibold text-ag-dark">
-                      {d.href ? <a href={d.href} className="hover:text-ag-base">{d.v}</a> : d.v}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-          </aside>
+            <div className="effectFade fadeUp"><ContactForm /></div>
+          </div>
         </div>
       </section>
-      <Motion />
     </>
   );
 }
